@@ -13,7 +13,7 @@ app.get('/', (req, res) => {
 });
 
 /* 1 - Criar/Cadastrar Demanda - POST */
-app.post('/demand', async (req, res) => {
+app.post('/demands', async (req, res) => {
     try {
         const { sku, startDate, endDate, totalPlanned, status } = req.body;
 
@@ -54,15 +54,25 @@ app.listen(port, () => {
 });
 
 /* 2 - Listar todas demandas - GET */
+app.get('/demands', async (req, res) => {
+    //de forma decrescente na datar, para facilitar visualizar as mais rcentes
+    const demands = await prisma.demand.findMany({ orderBy: { createdAt: 'desc' } });
+    res.json(demands);
+});
+
+/* 3 - Buscar demanda by ID(SKU) - GET */
+app.get('/demands/sku/:sku', async (req, res) => {
+    const { sku } = req.params;
+    const demand = await prisma.demand.findUnique({ where: { sku } });
+    if (!demand) return res.status(404).json({ error: 'Não encontrada.' });
+    res.json(demand);
+});
+/* 4 - Editar demandas by ID - PUT */
 //To-do
 
-/* 3 - Editar demandas by ID - PUT */
-//To-do
-
-/* 4 - Deletar demanda by ID - Delete */
+/* 5 - Deletar demanda by ID - Delete */
 //To-do
 
 /* Extras: Talvez adicionar, apenas para uma API mais 'robusta' e para facilitar nos meus teste 
 quando eu for checar nos insomnia, creio que ajude*/
-/* 5 - Buscar demanda by ID - GET */
 /* 6 - ? */
