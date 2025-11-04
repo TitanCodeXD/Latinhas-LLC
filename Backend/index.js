@@ -1,4 +1,22 @@
-//To-do
+const express = require('express');
+const { PrismaClient } = require('@prisma/client');
+const cors = require('cors');
+
+const prisma = new PrismaClient();
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+//Rota de teste - verificar tudo no insomnia
+app.get('/', (req, res) => {
+    res.send('Rota de teste concluída !! ✅');
+});
+
+// iniciando servid
+const port = process.env.PORT || 3030;
+app.listen(port, () => {
+    console.log('Servidor rodando na porta 3030 🚀💥💥');
+});
 
 /* 1 - Criar/Cadastrar Demanda - POST */
 //To-do
