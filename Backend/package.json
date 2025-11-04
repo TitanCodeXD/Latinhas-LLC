@@ -1,22 +1,26 @@
 {
-  "name": "backend",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "@prisma/client": "^6.18.0",
-    "cors": "^2.8.5",
-    "dotenv": "^17.2.3",
-    "express": "^5.1.0",
-    "prisma": "^6.18.0"
-  },
-  "devDependencies": {
-    "nodemon": "^3.1.10"
-  }
+    "name": "backend",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "dev": "nodemon --watch src --exec node src/index.js",
+        "start": "node src/index.js",
+        "prisma:generate": "prisma generate",
+        "prisma:migrate": "prisma migrate dev --name init",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@prisma/client": "^6.18.0",
+        "cors": "^2.8.5",
+        "dotenv": "^17.2.3",
+        "express": "^5.1.0",
+        "prisma": "^6.18.0"
+    },
+    "devDependencies": {
+        "nodemon": "^3.1.10"
+    }
 }
