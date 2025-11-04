@@ -7,6 +7,20 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Apenas para garantir que uma transição vá para a seguinte
+const validTransitions = {
+    PLANEJAMENTO: ['EM_ANDAMENTO'],
+    EM_ANDAMENTO: ['CONCLUIDO'],
+    CONCLUIDO: [],
+};
+
+function canTransition(current, next) {
+    if (current === next)
+        return true; /* para checar se esta válido, se o valor da chave for igual ao que esta 
+sendo requerido para editar*/
+    return validTransitions[current]?.includes(next);
+}
+
 //Rota de teste - verificar tudo no insomnia
 app.get('/', (req, res) => {
     res.send('Rota de teste concluída !! ✅');
@@ -67,8 +81,44 @@ app.get('/demands/sku/:sku', async (req, res) => {
     if (!demand) return res.status(404).json({ error: 'Não encontrada.' });
     res.json(demand);
 });
+
 /* 4 - Editar demandas by ID - PUT */
-//To-do
+app.put('/demands/:id', async (req, res) => {
+    try {
+        const id = Number(req.params.id);
+        const { sku, startDate, endDate, totalPlanned, status } = req.body;
+
+        // Validar se existe a demanda realmente, para evitar erros
+        const exist = await prisma.demand.findUnique({ where: { id } });
+        if (!exist) return res.status(404).json({ error: 'Demanda não encontrada.' });
+
+        // checar transição válida
+        if (status && !canTransition(exist.status, status)) {
+            return res
+                .status(400)
+                .json({ error: `Transição de status inválida: ${exist.status} -> ${status}` });
+        }
+
+        const updated = await prisma.demand.update({
+            where: { id },
+            data: {
+                sku: sku ?? undefined,
+                startDate: startDate ? new Date(startDate) : undefined,
+                endDate: endDate ? new Date(endDate) : undefined,
+                totalPlanned: totalPlanned != null ? Number(totalPlanned) : undefined,
+                status: status ?? undefined,
+            },
+        });
+
+        res.json(updated);
+    } catch (err) {
+        if (err.code === 'P2002') {
+            return res.status(409).json({ error: 'SKU já existente.' });
+        }
+        console.error(err);
+        res.status(500).json({ error: 'Erro no servidor.' });
+    }
+});
 
 /* 5 - Deletar demanda by ID - Delete */
 //To-do
