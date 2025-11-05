@@ -7,9 +7,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <div className="flex flex-col min-h-screen">
             {/* ""Navbar""" */}
             <header className="flex items-center justify-between px-6 py-3 bg-(--preto) text-white shadow-md">
-                <div className="flex items-center gap-3">
-                    <button className="text-2xl cursor-pointer">☰</button>
-                    <Image src={Logo} alt="Logo" width={90} height={40} />
+                <div className="flex items-center gap-5">
+                    <button className="text-3xl cursor-pointer text-(--laranja) ">☰</button>
+                    <Image src={Logo} alt="Logo" width={95} height={50} />
                 </div>
                 <div>
                     <Image
@@ -27,7 +27,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
             {/* Footer */}
             <footer className="text-center py-3 bg-(--preto) text-(--laranja)">
-                Latinhas LLC © 2025
+                © SMI Engeneering 2025
             </footer>
         </div>
     );
