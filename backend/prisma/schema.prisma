@@ -13,15 +13,25 @@ generator client {
 
 //Model das demandas
 model Demand {
-  id           Int      @id @default(autoincrement()) // chave interna
-  sku          String   @unique                      // SKU (id do item)
-  startDate    DateTime
+  id           Int       @id @default(autoincrement())
+  sku          String
+  description    String?
+  totalPlan Int
+  totalProd    Int        @default(0)
+  periodoId    Int
+  periodo      Periodo    @relation(fields: [periodoId], references: [id])
+}
+
+//Periodo
+model Periodo {
+  id           Int        @id @default(autoincrement())
+  startDate   DateTime
   endDate      DateTime
-  totalPlanned Float     // toneladas com decimal
-  status       Status    @default(PLANEJAMENTO)
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
-  description  String?
+  totalPlan Int
+  totalProd    Int         @default(0)
+  status       Status
+  demands     Demand[]
+  createdAt    DateTime    @default(now())
 }
 
 // Fixos
