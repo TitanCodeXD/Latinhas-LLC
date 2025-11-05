@@ -19,7 +19,7 @@ router.get('/:id', getPeriodById);
 
 router.delete('/demands/:id', deleteDemandFromPeriod);
 
-router.delete('/periods/:id', deletePeriod); //apenas para testes internos
+router.delete('/:id', deletePeriod); //apenas para testes internos
 
 router.patch('/demands/:id', editDemand);
 

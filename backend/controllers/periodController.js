@@ -151,11 +151,11 @@ export const deletePeriod = async (req, res) => {
         const id = Number(req.params.id);
 
         // Verificar se o período existe
-        const period = await prisma.period.findUnique({ where: { id } });
+        const period = await prisma.periodo.findUnique({ where: { id } });
         if (!period) return res.status(404).json({ error: 'Período não encontrado.' });
 
         // Deletar o período e todas as demandas relacionadas (cascade)
-        await prisma.period.delete({ where: { id } });
+        await prisma.periodo.delete({ where: { id } });
 
         res.status(200).json({ message: 'Período removido com sucesso.' });
     } catch (error) {

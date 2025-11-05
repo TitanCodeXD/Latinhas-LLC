@@ -19,7 +19,7 @@ model Demand {
   totalPlan Int
   totalProd    Int        @default(0)
   periodoId    Int
-  periodo      Periodo    @relation(fields: [periodoId], references: [id])
+  periodo      Periodo    @relation(fields: [periodoId], references: [id], onDelete: Cascade)
 }
 
 //Periodo
@@ -30,7 +30,7 @@ model Periodo {
   totalPlan Int
   totalProd    Int         @default(0)
   status       Status
-  demands     Demand[]
+  demands     Demand[]    
   createdAt    DateTime    @default(now())
 }
 
