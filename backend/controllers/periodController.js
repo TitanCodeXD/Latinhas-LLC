@@ -35,7 +35,7 @@ export const getAllPeriods = async (req, res) => {
 // Criar novo período
 export const createPeriod = async (req, res) => {
     try {
-        const { startDate, endDate, status, demands } = req.body;
+        const { startDate, endDate, demands } = req.body;
 
         // Calcula o total de planejamento com base nas demandas
         const totalPlan = demands.reduce((acc, d) => acc + (d.totalPlan || 0), 0);
@@ -44,7 +44,6 @@ export const createPeriod = async (req, res) => {
             data: {
                 startDate: new Date(startDate),
                 endDate: new Date(endDate),
-                status,
                 totalPlan,
                 totalProd: 0,
                 demands: {

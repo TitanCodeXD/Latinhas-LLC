@@ -29,7 +29,7 @@ model Periodo {
   endDate      DateTime
   totalPlan Int
   totalProd    Int         @default(0)
-  status       Status
+  status       Status      @default(PLANEJAMENTO)
   demands     Demand[]    
   createdAt    DateTime    @default(now())
 }
