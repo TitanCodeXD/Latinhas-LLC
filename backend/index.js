@@ -29,7 +29,7 @@ app.get('/', (req, res) => {
 /* 1 - Criar/Cadastrar Demanda - POST */
 app.post('/demands', async (req, res) => {
     try {
-        const { sku, startDate, endDate, totalPlanned, status } = req.body;
+        const { sku, startDate, endDate, totalPlanned, description, status } = req.body;
 
         if (!sku || !startDate || !endDate || totalPlanned == null) {
             //todos obrigatórios
@@ -44,6 +44,7 @@ app.post('/demands', async (req, res) => {
                 startDate: new Date(startDate),
                 endDate: new Date(endDate),
                 totalPlanned: Number(totalPlanned),
+                description: description || undefined,
                 status: status || undefined,
             },
         });
@@ -72,7 +73,7 @@ app.get('/demands', async (req, res) => {
 app.put('/demands/:id', async (req, res) => {
     try {
         const id = Number(req.params.id);
-        const { sku, startDate, endDate, totalPlanned, status } = req.body;
+        const { sku, startDate, endDate, totalPlanned, description, status } = req.body;
 
         // Validar se existe a demanda realmente, para evitar erros
         const exist = await prisma.demand.findUnique({ where: { id } });
@@ -92,6 +93,7 @@ app.put('/demands/:id', async (req, res) => {
                 startDate: startDate ? new Date(startDate) : undefined,
                 endDate: endDate ? new Date(endDate) : undefined,
                 totalPlanned: totalPlanned != null ? Number(totalPlanned) : undefined,
+                description: description ?? undefined,
                 status: status ?? undefined,
             },
         });
