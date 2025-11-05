@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import { atualizarStatusDoPeriodo } from '../utils/statusHelper.js';
 const prisma = new PrismaClient();
 
 //  Listar todos os períodos com suas demandas, vou usar na tela inicial para ja começar exibindo as demandas em um periodo
@@ -13,7 +14,7 @@ export const getAllPeriods = async (req, res) => {
             },
         });
 
-        // Calcula totalPlan e totalProd para cada período
+        // Calcular totalPlan e totalProd para cada período
         const formatted = periods.map((period) => {
             const totalPlan = period.demands.reduce((sum, d) => sum + d.totalPlan, 0);
             const totalProd = period.demands.reduce((sum, d) => sum + d.totalProd, 0);
@@ -121,6 +122,32 @@ export const editDemand = async (req, res) => {
                 ...(totalProd !== undefined && { totalProd }),
             },
         });
+
+        // Aqui vou me preocupar em sempre atualizar o status conforme a demanda é atualizada
+        //vou pegar o periodo ao qual ela esta relacionada, para depois comparar o totalPlan e totalProd
+
+        const periodo = await prisma.periodo.findUnique({
+            where: { id: updatedDemand.periodoId },
+        });
+
+        if (periodo) {
+            // Calcula o novo totalProd do período somando todas as demandas
+            const totalProdPeriodo = await prisma.demand.aggregate({
+                where: { periodoId: periodo.id },
+                _sum: { totalProd: true },
+            });
+
+            // Atualiza o status do período
+            const novoStatus = atualizarStatusDoPeriodo({
+                totalProd: totalProdPeriodo._sum.totalProd || 0,
+                totalPlan: periodo.totalPlan,
+            });
+
+            await prisma.periodo.update({
+                where: { id: periodo.id },
+                data: { status: novoStatus },
+            });
+        }
 
         return res.status(200).json(updatedDemand);
     } catch (error) {
