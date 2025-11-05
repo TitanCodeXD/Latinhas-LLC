@@ -61,12 +61,6 @@ app.post('/demands', async (req, res) => {
     }
 });
 
-// iniciando servid
-const port = process.env.PORT || 3030;
-app.listen(port, () => {
-    console.log('Servidor rodando na porta 3030 🚀💥💥');
-});
-
 /* 2 - Listar todas demandas - GET */
 app.get('/demands', async (req, res) => {
     //de forma decrescente na datar, para facilitar visualizar as mais rcentes
@@ -121,8 +115,28 @@ app.put('/demands/:id', async (req, res) => {
 });
 
 /* 5 - Deletar demanda by ID - Delete */
-//To-do
+app.delete('/demands/:id', async (req, res) => {
+    const id = Number(req.params.id);
+
+    // Validar se existe a demanda realmente, para evitar erros
+    const exist = await prisma.demand.findUnique({ where: { id } });
+    if (!exist) return res.status(404).json({ error: 'Demanda não encontrada.' });
+
+    try {
+        await prisma.demand.delete({ where: { id } });
+        res.json({ message: 'Demanda deletada comsucesso!', success: true });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Erro no servidor.' });
+    }
+});
+
+// iniciando servid
+const port = process.env.PORT || 3030;
+app.listen(port, () => {
+    console.log('Servidor rodando na porta 3030 🚀💥💥');
+});
 
 /* Extras: Talvez adicionar, apenas para uma API mais 'robusta' e para facilitar nos meus teste 
 quando eu for checar nos insomnia, creio que ajude*/
-/* 6 - ? */
+/* 6 - Pesquisar demandas por STATUS */
