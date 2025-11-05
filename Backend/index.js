@@ -68,15 +68,7 @@ app.get('/demands', async (req, res) => {
     res.json(demands);
 });
 
-/* 3 - Buscar demanda by ID(SKU) - GET */
-app.get('/demands/sku/:sku', async (req, res) => {
-    const { sku } = req.params;
-    const demand = await prisma.demand.findUnique({ where: { sku } });
-    if (!demand) return res.status(404).json({ error: 'Não encontrada.' });
-    res.json(demand);
-});
-
-/* 4 - Editar demandas by ID - PUT */
+/* 3 - Editar demandas by ID - PUT */
 app.put('/demands/:id', async (req, res) => {
     try {
         const id = Number(req.params.id);
@@ -114,7 +106,7 @@ app.put('/demands/:id', async (req, res) => {
     }
 });
 
-/* 5 - Deletar demanda by ID - Delete */
+/* 4 - Deletar demanda by ID - Delete */
 app.delete('/demands/:id', async (req, res) => {
     const id = Number(req.params.id);
 
@@ -139,4 +131,27 @@ app.listen(port, () => {
 
 /* Extras: Talvez adicionar, apenas para uma API mais 'robusta' e para facilitar nos meus teste 
 quando eu for checar nos insomnia, creio que ajude*/
+
+/* 5 - Buscar demanda by ID(SKU) - GET */
+app.get('/demands/sku/:sku', async (req, res) => {
+    const { sku } = req.params;
+    const demand = await prisma.demand.findUnique({ where: { sku } });
+    if (!demand) return res.status(404).json({ error: 'Não encontrada.' });
+    res.json(demand);
+});
+
 /* 6 - Pesquisar demandas por STATUS */
+app.get('/demands/status/:status', async (req, res) => {
+    try {
+        const { status } = req.params;
+        const demands = await prisma.demand.findMany({
+            where: { status },
+            orderBy: { createdAt: 'desc' },
+        });
+
+        res.json(demands);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: 'Erro ao listar demandas' });
+    }
+});
