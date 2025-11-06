@@ -14,13 +14,18 @@ export const getAllPeriods = async () => {
 };
 
 export async function addPeriod(periodData: any) {
-    const res = await fetch('http://localhost:3030/periods', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(periodData),
-    });
-    if (!res.ok) throw new Error('Erro ao criar período');
-    return await res.json();
+    const response = await api.post('/periods', periodData);
+    return response.data;
+}
+
+export async function updateDemand(id: string, data: { totalPlan?: number; totalProd?: number }) {
+    const res = await api.patch(`/periods/demands/${id}`, data);
+    return res.data;
+}
+
+export async function deleteDemand(id: string) {
+    const res = await api.delete(`/periods/demands/${id}`);
+    return res.data;
 }
 
 export default api;

@@ -1,6 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
+import { Input } from '@/components/ui/input';
+//API
+import { addPeriod } from '@/lib/api';
+
+//Estilização
+import { CiCirclePlus } from 'react-icons/ci';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
@@ -9,9 +15,6 @@ import {
     DialogTitle,
     DialogTrigger,
 } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { addPeriod } from '@/lib/api';
-import { CiCirclePlus } from 'react-icons/ci';
 
 interface Demand {
     sku: string;
@@ -50,12 +53,14 @@ export default function CreatePeriodModal({ onCreated }: { onCreated: () => void
             setStartDate('');
             setEndDate('');
             setDemands([{ sku: '', description: '', totalPlan: 0 }]);
-            onCreated(); // atualiza a lista principal
+            onCreated(); // para pagian iniciall
         } catch (error) {
             console.error('Erro ao criar período:', error);
         }
     };
 
+    //para evitar que os dados fique msalvos mesmo apos fechar e abrir novamente
+    //adição simples que n muda mt coisa, macho interessante
     const resetForm = () => {
         setStartDate('');
         setEndDate('');

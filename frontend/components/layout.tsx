@@ -1,3 +1,5 @@
+//Layout fixo do site, entao criei um component a parte, para colocar ele no layout do next, recebendo
+// um children (o body que eu for fazendo na home ou qualquer outra pagina que eu criasse)
 import Image from 'next/image';
 import Profile from '../public/generic-profile.jpg';
 import Logo from '../public/Logo-SMI-group-branco.png';
@@ -17,7 +19,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                         alt="Profile"
                         width={35}
                         height={35}
-                        className="rounded-full"
+                        className="rounded-full cursor-pointer"
                     />
                 </div>
             </header>

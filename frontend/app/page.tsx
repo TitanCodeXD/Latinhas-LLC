@@ -8,6 +8,7 @@ import { getAllPeriods } from '@/lib/api';
 
 //Compoents
 import CreatePeriodModal from '@/components/createPeriodModal';
+import EditPeriodModal from '@/components/editPeriodModal';
 
 //Estilização
 import { Button } from '@/components/ui/button';
@@ -15,11 +16,18 @@ import { CiCirclePlus } from 'react-icons/ci';
 import { FaEdit } from 'react-icons/fa';
 import { IoMdAdd } from 'react-icons/io';
 
+interface Demand {
+    id: string;
+    sku: string;
+    description?: string;
+    totalPlan: number;
+    totalProd: number;
+}
 interface Period {
     id: number;
     startDate: string;
     endDate: string;
-    demands?: { sku: string }[];
+    demands?: Demand[];
     sku: string;
     totalPlan: number;
     totalProd: number;
@@ -29,7 +37,11 @@ interface Period {
 export default function Home() {
     const [periods, setPeriods] = useState<Period[]>([]);
     const [loading, setLoading] = useState(true);
+    //Modal de criação
     const [openModal, setOpenModal] = useState(false);
+    //Para modal de edição
+    const [selectedPeriod, setSelectedPeriod] = useState<Period | null>(null);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
     useEffect(() => {
         async function loadPeriods() {
@@ -55,6 +67,11 @@ export default function Home() {
     const handleCreated = async () => {
         const data = await getAllPeriods();
         setPeriods(data);
+    };
+
+    const handleEdit = (period: Period) => {
+        setSelectedPeriod(period);
+        setIsEditModalOpen(true);
     };
 
     if (loading)
@@ -93,9 +110,11 @@ export default function Home() {
                             <td className="p-3 flex justify-center">
                                 <button
                                     className="text-blue-600 hover:underline"
-                                    onClick={() => console.log(`Editar período ${period.id}`)}
+                                    onClick={() => {
+                                        handleEdit(period);
+                                    }}
                                 >
-                                    <FaEdit size={22}></FaEdit>
+                                    <FaEdit size={22} className="cursor-pointer"></FaEdit>
                                 </button>
                             </td>
 
@@ -115,7 +134,7 @@ export default function Home() {
                                 className={`p-3 font-semibold  ${
                                     period.status === 'CONCLUIDO'
                                         ? 'text-green-600 bg-lime-200'
-                                        : period.status === 'EM ANDAMENTO'
+                                        : period.status === 'EM_ANDAMENTO'
                                         ? 'text-blue-600 bg-cyan-200'
                                         : 'text-gray-500 bg-red-200'
                                 }`}
@@ -126,6 +145,17 @@ export default function Home() {
                     ))}
                 </tbody>
             </table>
+            {isEditModalOpen && selectedPeriod && (
+                <EditPeriodModal
+                    isOpen={isEditModalOpen}
+                    periodId={String(selectedPeriod.id)}
+                    demands={selectedPeriod.demands || []} //apenas enquando debugo
+                    onClose={() => setIsEditModalOpen(false)}
+                    onSave={() => {
+                        handleCreated(); //reaproveitando o handle que criei para dar 'refresh' aao criar um periodo
+                    }}
+                />
+            )}
         </div>
     );
 }
