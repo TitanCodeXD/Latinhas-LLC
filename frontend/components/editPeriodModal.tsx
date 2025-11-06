@@ -2,6 +2,16 @@
 import { useState } from 'react';
 //Estilização
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
@@ -38,6 +48,11 @@ export default function EditPeriodModal({
     onSave,
 }: EditPeriodModalProps) {
     const [demands, setDemands] = useState<Demand[]>(initialDemands);
+    //Apenas para controlar o alert do shadcn
+    const [deleteAction, setDeleteAction] = useState<{
+        type: 'demand' | 'period' | null;
+        id?: string;
+    }>({ type: null });
 
     const handleChange = (id: string, field: keyof Demand, value: string | number) => {
         setDemands((prev) =>
@@ -104,7 +119,7 @@ export default function EditPeriodModal({
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="max-w-4xl">
+            <DialogContent className="max-w-4xl!">
                 <DialogHeader>
                     <DialogTitle className="text-(--laranja)">Editar Demandas</DialogTitle>
                 </DialogHeader>
@@ -114,8 +129,8 @@ export default function EditPeriodModal({
                         <tr className="bg-gray-100 text-left">
                             <th className="p-3 border-b">SKU</th>
                             <th className="p-3 border-b">Descrição</th>
-                            <th className="p-3 border-b">Total Plan</th>
-                            <th className="p-3 border-b">Total Prod</th>
+                            <th className="p-3 border-b">Total Planejado</th>
+                            <th className="p-3 border-b">Total Produzidos</th>
                             <th className="p-3 border-b">Remover</th>
                         </tr>
                     </thead>
