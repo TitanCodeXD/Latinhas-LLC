@@ -78,7 +78,7 @@ export default function Home() {
         return (
             <div className="flex text-center items-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                 <p className="">Carregando... </p>
-                <p className="loader ml-4"></p>
+                <p className="loader ml-4"> </p>
             </div>
         );
 
@@ -101,48 +101,61 @@ export default function Home() {
                     </tr>
                 </thead>
                 <tbody>
-                    {periods.map((period) => (
-                        <tr
-                            key={period.id}
-                            className="border-b hover:bg-gray-50 transition text-center"
-                        >
-                            {/* Botão de ediçtar período */}
-                            <td className="p-3 flex justify-center">
-                                <button
-                                    className="text-blue-600 hover:underline"
-                                    onClick={() => {
-                                        handleEdit(period);
-                                    }}
-                                >
-                                    <FaEdit size={22} className="cursor-pointer"></FaEdit>
-                                </button>
-                            </td>
+                    {/* Se houver períodos, mapear sobre eles*/}
 
-                            {/* Período formatado para uma data mais 'visual', no backend ta com padrao de fuso horars*/}
-                            <td className="p-3">
-                                {formatDate(period.startDate)} - {formatDate(period.endDate)}
-                            </td>
-
-                            {/* Quantidade de SKUs */}
-
-                            <td className="p-3">{period.demands ? period.demands.length : 0}</td>
-
-                            {/* Totais */}
-                            <td className="p-3">{period.totalPlan}</td>
-                            <td className="p-3">{period.totalProd}</td>
-                            <td
-                                className={`p-3 font-semibold  ${
-                                    period.status === 'CONCLUIDO'
-                                        ? 'text-green-600 bg-lime-200'
-                                        : period.status === 'EM_ANDAMENTO'
-                                        ? 'text-blue-600 bg-cyan-200'
-                                        : 'text-gray-500 bg-red-200'
-                                }`}
+                    {periods && periods.length > 0 ? (
+                        periods.map((period) => (
+                            <tr
+                                key={period.id}
+                                className="border-b hover:bg-gray-50 transition text-center"
                             >
-                                {period.status}
+                                {/* Botão de editar período */}
+                                <td className="p-3 flex justify-center">
+                                    <button
+                                        className="text-blue-600 hover:underline"
+                                        onClick={() => {
+                                            handleEdit(period);
+                                        }}
+                                    >
+                                        <FaEdit size={22} className="cursor-pointer"></FaEdit>
+                                    </button>
+                                </td>
+
+                                {/* Período formatado para uma data mais 'visual', no backend ta com padrao de fuso horars*/}
+                                <td className="p-3">
+                                    {formatDate(period.startDate)} - {formatDate(period.endDate)}
+                                </td>
+
+                                {/* Quantidade de SKUs */}
+                                <td className="p-3">
+                                    {period.demands ? period.demands.length : 0}
+                                </td>
+
+                                {/* Totais */}
+                                <td className="p-3">{period.totalPlan}</td>
+                                <td className="p-3">{period.totalProd}</td>
+                                <td
+                                    className={`p-3 font-semibold  ${
+                                        period.status === 'CONCLUIDO'
+                                            ? 'text-green-600 bg-lime-200'
+                                            : period.status === 'EM_ANDAMENTO'
+                                            ? 'text-blue-600 bg-cyan-200'
+                                            : 'text-gray-500 bg-red-200'
+                                    }`}
+                                >
+                                    {period.status}
+                                </td>
+                            </tr>
+                        ))
+                    ) : (
+                        // se nao conseguir conectar com banco por algum motivo, aparece um texto para o usuario saber
+                        // ou se apenas nao tiver nenhguum periodo criado ainda
+                        <tr>
+                            <td colSpan={6} className="p-4 text-center text-gray-500">
+                                Nenhum período encontrado.
                             </td>
                         </tr>
-                    ))}
+                    )}
                 </tbody>
             </table>
             {isEditModalOpen && selectedPeriod && (
