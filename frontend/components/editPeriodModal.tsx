@@ -85,7 +85,7 @@ export default function EditPeriodModal({
         <Dialog open={isOpen} onOpenChange={onClose}>
             <DialogContent className="max-w-4xl">
                 <DialogHeader>
-                    <DialogTitle>Editar Demandas</DialogTitle>
+                    <DialogTitle className="text-(--laranja)">Editar Demandas</DialogTitle>
                 </DialogHeader>
 
                 <table className="w-full border-collapse">
@@ -138,10 +138,16 @@ export default function EditPeriodModal({
                 </table>
 
                 <div className="flex justify-end gap-3 mt-4">
-                    <Button variant="outline" onClick={onClose}>
+                    <Button
+                        variant="outline"
+                        onClick={onClose}
+                        className="bg-red-600 text-white mr-4"
+                    >
                         Cancelar
                     </Button>
-                    <Button onClick={handleSave}>Salvar</Button>
+                    <Button onClick={handleSave} className="bg-green-600 text-white">
+                        Salvar
+                    </Button>
                 </div>
             </DialogContent>
         </Dialog>

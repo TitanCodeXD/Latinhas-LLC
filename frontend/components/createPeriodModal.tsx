@@ -7,6 +7,7 @@ import { addPeriod } from '@/lib/api';
 
 //Estilização
 import { CiCirclePlus } from 'react-icons/ci';
+import { FaPlus } from 'react-icons/fa6';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
@@ -75,14 +76,17 @@ export default function CreatePeriodModal({ onCreated }: { onCreated: () => void
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button variant="default" className="bg-(--laranja) mt-4 mb-4 cursor-pointer">
-                    <CiCirclePlus className="mr-2" /> Adicionar
+                <Button
+                    variant="default"
+                    className="bg-(--laranja) mt-4 mb-4 cursor-pointer w-44 h-14"
+                >
+                    <FaPlus size={40} className="mr-2" /> Adicionar
                 </Button>
             </DialogTrigger>
 
             <DialogContent className="max-w-2xl">
                 <DialogHeader>
-                    <DialogTitle>Criar Novo Período</DialogTitle>
+                    <DialogTitle className="text-(--laranja)">Criar Novo Período</DialogTitle>
                 </DialogHeader>
 
                 <div className="flex flex-col gap-4 mt-4">
