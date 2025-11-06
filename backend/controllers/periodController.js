@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { atualizarStatusDoPeriodo } from '../utils/statusHelper.js';
+import { recalcularPeriodo } from '../utils/statusHelper.js';
 const prisma = new PrismaClient();
 
 //  Listar todos os períodos com suas demandas, vou usar na tela inicial para ja começar exibindo as demandas em um periodo
@@ -125,28 +125,8 @@ export const editDemand = async (req, res) => {
         // Aqui vou me preocupar em sempre atualizar o status conforme a demanda é atualizada
         //vou pegar o periodo ao qual ela esta relacionada, para depois comparar o totalPlan e totalProd
 
-        const periodo = await prisma.periodo.findUnique({
-            where: { id: updatedDemand.periodoId },
-        });
-
-        if (periodo) {
-            // Calcula o novo totalProd do período somando todas as demandas
-            const totalProdPeriodo = await prisma.demand.aggregate({
-                where: { periodoId: periodo.id },
-                _sum: { totalProd: true },
-            });
-
-            // Atualiza o status do período
-            const novoStatus = atualizarStatusDoPeriodo({
-                totalProd: totalProdPeriodo._sum.totalProd || 0,
-                totalPlan: periodo.totalPlan,
-            });
-
-            await prisma.periodo.update({
-                where: { id: periodo.id },
-                data: { status: novoStatus },
-            });
-        }
+        // Recalcula o período usando a função auxiliar no util, para ficar mais compacto aqui
+        await recalcularPeriodo(updatedDemand.periodoId, prisma);
 
         return res.status(200).json(updatedDemand);
     } catch (error) {
@@ -160,13 +140,29 @@ export const deleteDemandFromPeriod = async (req, res) => {
     try {
         const id = Number(req.params.id);
 
+        // Busca a demanda antes de deletar para pegar o periodoId
+        const demand = await prisma.demand.findUnique({
+            where: { id },
+        });
+
+        if (!demand) {
+            return res.status(404).json({ error: 'Demanda não encontrada' });
+        }
+
+        const periodoId = demand.periodoId;
+
+        // Deleta a demanda
         await prisma.demand.delete({
             where: { id },
         });
 
-        res.status(200).json({ message: 'Demanda removida com sucesso.' });
+        // Recalcula o período (totais e status)
+        await recalcularPeriodo(periodoId, prisma);
+
+        return res.status(200).json({ message: 'Demanda deletada com sucesso' });
     } catch (error) {
-        res.status(500).json({ error: 'Erro ao remover demanda.' });
+        console.error('Erro ao deletar demanda:', error);
+        return res.status(500).json({ error: 'Erro ao deletar demanda' });
     }
 };
 

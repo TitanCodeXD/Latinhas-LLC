@@ -23,6 +23,7 @@ router.delete('/:id', deletePeriod); //apenas para testes internos
 
 router.patch('/demands/:id', editDemand);
 
-router.patch('/:id/status', updatePeriodStatus);
+router.patch('/:id/status', updatePeriodStatus); //nem usei no fim das contas, criei com uma ideia,
+//no frontend acabou me vindo ideias diferentes e modifiquei tanto o back quando o front
 
 export default router;

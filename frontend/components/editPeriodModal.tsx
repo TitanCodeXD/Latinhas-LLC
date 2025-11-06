@@ -9,6 +9,7 @@ import { toast } from 'sonner';
 //API
 import { deleteDemand } from '@/lib/api';
 import { updateDemand } from '@/lib/api';
+import { deletePeriod } from '@/lib/api';
 
 //Icons
 import { Trash2 } from 'lucide-react';
@@ -33,6 +34,7 @@ export default function EditPeriodModal({
     isOpen,
     onClose,
     demands: initialDemands,
+    periodId,
     onSave,
 }: EditPeriodModalProps) {
     const [demands, setDemands] = useState<Demand[]>(initialDemands);
@@ -51,17 +53,35 @@ export default function EditPeriodModal({
         );
     };
 
-    const handleDelete = async (id: string) => {
-        if (confirm('Tem certeza que deseja excluir esta demanda?')) {
+    const handleDeleteDemand = async (id: string) => {
+        if (confirm('⚠️ Tem certeza que deseja excluir esta demanda?')) {
             try {
                 await deleteDemand(id);
                 setDemands((prev) => prev.filter((d) => d.id !== id));
 
-                toast.success('Demanda escluída com sucesso!'); //Nao funcionou, shadcn disse que estava descontinuado
+                toast.success('Demanda excluída com sucesso!'); //Nao funcionou, shadcn disse que estava descontinuado
                 //mas com sonner era para funcionar, e bom... nao funcinou
             } catch (error) {
                 toast.error('Erro ao escluir demanda');
                 console.log(error);
+            }
+        }
+    };
+
+    const handleDeletePeriod = async () => {
+        if (
+            confirm(
+                '⚠️ Tem certeza que deseja excluir este Período? Todas as demandas associadas serão excluídas também!'
+            )
+        ) {
+            try {
+                await deletePeriod(periodId);
+                toast.success('Período excluído com sucesso!');
+                onSave();
+                onClose();
+            } catch (error) {
+                toast.error('Erro ao excluir período');
+                console.error(error);
             }
         }
     };
@@ -76,6 +96,7 @@ export default function EditPeriodModal({
             }
             onSave();
             onClose();
+            toast.success('Alterações salvas com sucesso!');
         } catch (err) {
             console.error('Erro ao salvar alterações:', err);
         }
@@ -127,7 +148,7 @@ export default function EditPeriodModal({
                                     <Button
                                         variant="destructive"
                                         size="sm"
-                                        onClick={() => handleDelete(demand.id)}
+                                        onClick={() => handleDeleteDemand(demand.id)}
                                     >
                                         <Trash2 className="h-4 w-4" />
                                     </Button>
@@ -137,17 +158,28 @@ export default function EditPeriodModal({
                     </tbody>
                 </table>
 
-                <div className="flex justify-end gap-3 mt-4">
-                    <Button
-                        variant="outline"
-                        onClick={onClose}
-                        className="bg-red-600 text-white mr-4"
-                    >
-                        Cancelar
-                    </Button>
-                    <Button onClick={handleSave} className="bg-green-600 text-white">
-                        Salvar
-                    </Button>
+                <div className="flex justify-between gap-3 mt-4">
+                    <div>
+                        <Button
+                            variant="outline"
+                            onClick={handleDeletePeriod}
+                            className="bg-red-600 text-white mr-4"
+                        >
+                            Apagar Período
+                        </Button>
+                    </div>
+                    <div>
+                        <Button
+                            variant="outline"
+                            onClick={onClose}
+                            className="bg-red-600 text-white mr-4"
+                        >
+                            Cancelar
+                        </Button>
+                        <Button onClick={handleSave} className="bg-green-600 text-white">
+                            Salvar
+                        </Button>
+                    </div>
                 </div>
             </DialogContent>
         </Dialog>

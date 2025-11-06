@@ -1,7 +1,7 @@
 import express from 'express';
 
 import cors from 'cors';
-import periodRoutes from './routes/periodRoutes.js';
+import periodRoutes from '../routes/periodRoutes.js';
 
 const app = express();
 app.use(cors());

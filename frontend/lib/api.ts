@@ -28,4 +28,10 @@ export async function deleteDemand(id: string) {
     return res.data;
 }
 
+//opcional que quis fazer, para não acumular periodos
+export async function deletePeriod(id: string) {
+    const res = await api.delete(`/periods/${id}`);
+    return res.data;
+}
+
 export default api;
