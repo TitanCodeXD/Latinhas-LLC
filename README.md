@@ -162,6 +162,11 @@ O frontend estará rodando em http://localhost:3000
 ## Por que Next?
 
 -   Next é uma das tecnologias mais modernas atualmente, se adequar as tecnologias é estar atualizado com o mercado, eu ja tinha feito um projeto com next antes, gostei do jeito que ele funciona, bem otimizado, alem de ja vir integrado com outras tecnologias modernas, como Tailwind para CSS.
+-
+
+## Commits
+
+-   Tentei deixar os commits organizados desde o ínicio do projeto. Não existe um padrão 100% correto, mas durante as pesquisas que fiz, o padrão que usei é um dos melhores para organização e clareza nos commits. Então, se quiser acompanhar um pouco do histórico do meu projeto, recomendo conferir um pouco meus commits :)
 
 ## 🙏 Agradecimentos
 
