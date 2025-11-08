@@ -135,15 +135,15 @@ O frontend estará rodando em http://localhost:3000
 
 ## Tela da aplicação rodando com docker no terminal
 
-![Tela da aplicação rodando com docker no terminal](image.png)
+![Tela da aplicação rodando com docker no terminal](./images/image.png)
 
 ## Tela inicial do projeto
 
-![Tela inicial do projeto](image-2.png)
+![Tela inicial do projeto](./images/image-2.png)
 
 ## Tela de editar período podendo alterar o quanto foi produzido de alguma demanda e apagar
 
-![Tela de edição](image-3.png)
+![Tela de edição](./images/image-3.png)
 
 # 📄 Observações e Decisões
 
@@ -167,6 +167,10 @@ O frontend estará rodando em http://localhost:3000
 ## Commits
 
 -   Tentei deixar os commits organizados desde o ínicio do projeto. Não existe um padrão 100% correto, mas durante as pesquisas que fiz, o padrão que usei é um dos melhores para organização e clareza nos commits. Então, se quiser acompanhar um pouco do histórico do meu projeto, recomendo conferir um pouco meus commits :)
+
+## Histório do meu raciocinio
+
+-   Há alguns controllers dos quais eu construí no começo do projeto, pois tinha setado uma ideia de projeto, mas conforme foi mudando eu acabei não usando eles no fim das contas, ficou mais como um uso de backend/manutenção. Seria o ideal apagar as coisas que não estão sendo utilizadas para um código mais limpo, mas acho que para esta prova é interessante manter todo meu histórico de raciocínio e as ideias que tive durante o processo, mesmo que algumas coisas não fossem aproveitadas no projeto final/integrado com o frontend.
 
 ## 🙏 Agradecimentos
 
