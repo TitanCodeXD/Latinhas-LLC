@@ -1,7 +1,13 @@
 'use client';
 import { useState } from 'react';
 //Estilização
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogDescription,
+} from '@/components/ui/dialog';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -105,6 +111,7 @@ export default function EditPeriodModal({
         try {
             for (const demand of demands) {
                 await updateDemand(demand.id, {
+                    description: demand.description,
                     totalPlan: demand.totalPlan,
                     totalProd: demand.totalProd,
                 });
@@ -120,8 +127,14 @@ export default function EditPeriodModal({
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
             <DialogContent className="max-w-4xl!">
-                <DialogHeader>
-                    <DialogTitle className="text-(--laranja)">Editar Demandas</DialogTitle>
+                <DialogHeader className="border-b-4 border-orange-600 pb-4 mb-6">
+                    <DialogTitle className="text-(--laranja) ">Editar Demandas</DialogTitle>
+
+                    <DialogDescription className="text-gray-600">
+                        Altere Descrição, total planejado ou/e produzido. O status do período será
+                        atualizado automaticamente ao salvar. é possível apagar o período, mas
+                        cuidado! Não tem como voltar atrás!
+                    </DialogDescription>
                 </DialogHeader>
 
                 <table className="w-full border-collapse">
@@ -138,7 +151,15 @@ export default function EditPeriodModal({
                         {demands.map((demand) => (
                             <tr key={demand.id}>
                                 <td className="p-2 border-b">{demand.sku}</td>
-                                <td className="p-2 border-b">{demand.description || '-'}</td>
+                                <td className="p-2 border-b">
+                                    <Input
+                                        type="string"
+                                        value={demand.description}
+                                        onChange={(e) =>
+                                            handleChange(demand.id, 'description', e.target.value)
+                                        }
+                                    ></Input>
+                                </td>
                                 <td className="p-2 border-b">
                                     <Input
                                         type="number"

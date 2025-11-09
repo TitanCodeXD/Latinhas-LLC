@@ -65,7 +65,7 @@ export const createPeriod = async (req, res) => {
     }
 };
 
-// BBuscar um período por ID
+// Buscar um período por ID PARA TESTES
 export const getPeriodById = async (req, res) => {
     try {
         const { id } = req.params;
@@ -84,8 +84,9 @@ export const getPeriodById = async (req, res) => {
         res.status(500).json({ error: 'Erro ao buscar período.' });
     }
 };
+// ^^ PARA TESTES
 
-// Atualizar status de um período
+// Atualizar status de um período DEPRECIADO
 export const updatePeriodStatus = async (req, res) => {
     try {
         const id = Number(req.params.id); // id do período
@@ -106,6 +107,7 @@ export const updatePeriodStatus = async (req, res) => {
         return res.status(500).json({ error: 'Erro ao atualizar status do período' });
     }
 };
+// ^^ DEPRECIADO
 
 //Editar uma demanda existente
 export const editDemand = async (req, res) => {

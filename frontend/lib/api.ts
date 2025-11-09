@@ -18,7 +18,10 @@ export async function addPeriod(periodData: any) {
     return response.data;
 }
 
-export async function updateDemand(id: string, data: { totalPlan?: number; totalProd?: number }) {
+export async function updateDemand(
+    id: string,
+    data: { description?: string; totalPlan?: number; totalProd?: number }
+) {
     const res = await api.patch(`/periods/demands/${id}`, data);
     return res.data;
 }
