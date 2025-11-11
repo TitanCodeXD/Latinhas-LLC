@@ -2,6 +2,8 @@
 FROM node:20-alpine AS base
 WORKDIR /app
 
+ENV NODE_OPTIONS=--max_old_space_size=4096
+
 # front
 FROM base AS builder-frontend
 WORKDIR /app/frontend
@@ -34,6 +36,7 @@ COPY frontend/public ./frontend/public
 
 #estava dando erro no prisma, entao para garantir q o prisma rode corretamente onde for, alteraçao no docker build
 WORKDIR /app/backend
+RUN npm install prisma --no-save
 RUN npx prisma generate
 
 # porta do backe do front
