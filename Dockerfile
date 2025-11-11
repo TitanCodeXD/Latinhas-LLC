@@ -34,10 +34,17 @@ COPY backend ./backend
 COPY --from=builder-frontend /app/frontend/.next ./frontend/.next
 COPY frontend/public ./frontend/public
 
+#AS VARIAVEIS, TINHA ESQUECIDO
+ARG DATABASE_URL=file:./prisma/dev.db
+ENV DATABASE_URL=$DATABASE_URL
+
 #estava dando erro no prisma, entao para garantir q o prisma rode corretamente onde for, alteraçao no docker build
 WORKDIR /app/backend
 RUN npm install prisma --no-save
 RUN npx prisma generate
+
+# Depois do prisma generate:
+ENV DATABASE_URL=   
 
 # porta do backe do front
 EXPOSE 3030 3000
