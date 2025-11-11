@@ -43,8 +43,6 @@ WORKDIR /app/backend
 RUN npm install prisma --no-save
 RUN npx prisma generate
 
-# Depois do prisma generate:
-ENV DATABASE_URL=   
 
 # porta do backe do front
 EXPOSE 3030 3000
